@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Roblox Group Member Viewer</title>
+  <title>Roblox Group Member Checker</title>
 
   <style>
     :root{--bg:#0f1724;--card:#0b1220;--accent:#7c3aed;--muted:#94a3b8;--glass: rgba(255,255,255,0.03)}
@@ -32,7 +32,7 @@
   <div class="wrap">
     <div class="card">
       <h1>Roblox Group Member Viewer</h1>
-      <p>Enter a Roblox Group ID to fetch all members, display names, usernames, and ranks.</p>
+      <p>Enter a Roblox Group ID to fetch all members, display names, usernames, and roles.</p>
 
       <label>Group ID</label>
       <input id="groupId" placeholder="e.g. 1234567">
@@ -45,10 +45,8 @@
       <table id="table" style="display:none">
         <thead>
           <tr>
-            <th>#</th>
             <th>Username</th>
             <th>Display Name</th>
-            <th>Rank</th>
             <th>Role</th>
             <th>UserID</th>
           </tr>
@@ -60,7 +58,7 @@
 
       <footer style="margin-top:15px;color:var(--muted);font-size:13px">
         Uses Roblox public API via corsproxy.io.  
-        Made for PaulusKernmagne ❤
+        Made by PaulusKernmagne ❤
       </footer>
     </div>
   </div>
@@ -128,13 +126,11 @@ document.getElementById("checkBtn").onclick = async () => {
 
     members.sort((a,b)=>b.rank - a.rank);
 
-    members.forEach((m,i)=>{
+    members.forEach((m)=>{
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td>${i+1}</td>
         <td>${m.username}</td>
         <td>${m.displayName}</td>
-        <td>${m.rank}</td>
         <td>${m.role}</td>
         <td>${m.userId}</td>
       `;
@@ -147,10 +143,10 @@ document.getElementById("checkBtn").onclick = async () => {
     exportBtn.disabled = false;
     exportBtn.onclick = () => {
       const lines = [
-        "index,username,displayName,rank,role,userId"
+        "username,displayName,role,userId"
       ];
-      members.forEach((m,i)=>{
-        lines.push(`${i+1},"${m.username}","${m.displayName}",${m.rank},"${m.role}",${m.userId}`);
+      members.forEach((m)=>{
+        lines.push(`"${m.username}","${m.displayName}","${m.role}",${m.userId}`);
       });
       const blob = new Blob([lines.join("\n")], {type:"text/csv"});
       const url = URL.createObjectURL(blob);
